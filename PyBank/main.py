@@ -4,6 +4,7 @@ import csv
 import pandas as pd
 
 # Set path to csv
+
 csvpath = os.path.join('Resources', 'budget_data.csv')
 
 # Translates the file into a readable format to be used by python
@@ -12,82 +13,54 @@ with open (csvpath, 'r') as csvfile:
 # Reads the first row of headers and prints the headers as actual headers in the output
     csv_header = next(csvreader)
 
-#Lists to store headers "Date" and "Profit/Losses"
+#Lists to store values 
     date = []
-    profit = []
-    losses = []
+    newDate = []
     newStringVal = []
     avgList = []
 # Reads each row of data after the header
     for row in csvreader:
-        # Add data to the new list
+        # Add data to the new list(it is printed as a string so you have to convert later)
         newStringVal.append(row[1])
-        # Add data to the date array
+        # Add data to the date array(Will stay a String)
         date.append(row[0]) 
 
+#Supposed to print to the txt file.
 file = 'Analysis/analysis.txt'
 with open(file, 'w', newline = '') as txt_file:  
     txt_file.write("This is an entry")
-
 #Print header to output 
     print("Financial Analysis")
     txt_file.write("Financial Analysis")
     print("-------------------")
     txt_file.write("-------------------")
-# count the months in date.
-    print(f"Total Months:     ",len(date))
-    txt_file.write(f"Total Months:     ",len(date))
 
-#Create a new list to store integer values from String list
+# Count the months in date.
+    print(f'Total Months:    {len(date)}')
+# Create a newintlist to store integer values from String list
 NewIntList = [eval(i) for i in newStringVal]
-#add all values together and print total
+# Add all values together and print total
 totalprofits = sum(NewIntList)
-#calculate differences between values in newIntList
-avgList = [NewIntList[i+1] - NewIntList[i] for i in range(len(NewIntList)-1)]
-
-#print Total Profits
+# Print Total Profits
 print("Total:           $",totalprofits)
-txt_file.write("Total:           $",totalprofits)
+# Calculate differences between values in newIntList. This iterates through the list and finds the difference btwn adjacent vals
+avgList = [NewIntList[i+1] - NewIntList[i] for i in range(len(NewIntList)-1)]
 # Declare a variable for the average change
 AvgChng = sum(avgList)/len(avgList)
-# Print into the Terminal
-print(f"Average Changes: $", round(AvgChng, 2))
-txt_file.write(f"Average Changes: $", round(AvgChng, 2))
+# Print into the Terminal and round to cents
+print(f'Average Changes: $, {round(AvgChng, 2)}')
 
 
-# Print max of difference list
-
-
-newDate = []
-# Zipped lists into summary   
-
-summary =  list(zip(date, newDate, avgList, NewIntList))
-#print originall summary
-for date in summary:
-    for i in date[0]:
-        newDate.append[date[i+1]]
-        print(newDate)
-print(f"Max of diff list: $", newDate, max(avgList))
-txt_file.write
-# Print min of difference list
-print(f"Min of diff list: $", newDate, min(avgList))
-txt_file.write
-#For loop
-#for avgList in summary:
-    #max_Val = max(summary)
-    #min_Val = min(summary)
-    #max_Val = max(summary, key=lambda x: x[1])
-    #min_Val = min(summary, key=lambda x: x[1])
-#find the greatest increase in profits and print with the date attached
-#print(f"Greatest increase in profits:", max_Val)
-#find the greatest decrease in profits and print with the date attached
-#print(f"Greatest decrease in profits:", min_Val)
-#print(max_Val)
-#print(min_Val)
-
-
-
-# Printing results into a text file.
-
-#open a txt file for writing
-    
+# Zipped lists into summary with variables date and NewIntList
+summary =  list(zip(date, NewIntList))
+# For loop that will append into newDate , but skipping the first value
+for i in range(1, len(summary)):
+    newDate.append(date[i])
+# Zipped list into new summary with variables newDate and avgList
+newSummary = list(zip(newDate, avgList))
+# Sets a variable to call the newDate key separate from the avgList Key, but still attached to max/min.
+maxSummary = max(newSummary, key=lambda x: x[1])
+minSummary = min(newSummary, key = lambda x: x[1])
+# FINAL PRINT LINES
+print(f"Greatest Increase in Profits: {maxSummary[0]}, ${max(avgList)}")
+print(f"Greatest Decrease in Profits: {minSummary[0]}, ${min(avgList)}")
