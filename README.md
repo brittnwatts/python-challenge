@@ -4,8 +4,6 @@ This ReadMe serves to:
    1. Certify that this work is my own,
    2. Specify code source and its location in my 'python-challenge' repository,
    3. Clarify the reason for the assignment,
-   4. Explain the code and how it works.
-
 
 1. 
 My name is Brittney Watts, and I am in the UNCC/EdX Data Analytics Bootcamp. Currently, we 
